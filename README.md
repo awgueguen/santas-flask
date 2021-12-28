@@ -5,7 +5,7 @@ First project done as a part of the *"Tech-Front Manager 2"* training provided b
 ## Santa's API
 This project first aim was to apply our basic knowledge of Python programming with the usage of **FLASK** & **RESTful API**.
 Using classic methods *(e.g. GET, POST, PUT, DELETE)*, we were asked to work on a interfaceless API generating informations on multiple sort of items, categories, toys, elves, wishes or schedules.
-The whole process forced us to confront several issues, like handling password using a give hashing technique, or handling multiple error cases.
+The whole process forced us to confront several issues, like handling password using a given hashing technique, or handling multiple error cases.
 
 ## Resolution approach
 

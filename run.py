@@ -55,17 +55,16 @@ def index_toys():
     table, db, mycursor = get_db(request.path)
     table = 'toys'
     data = {i: convert(j) for i, j in request.form.items()}
-    data_check = sorted([i for i in data.keys()])
+    data_check = sorted(list(data.keys()))
 
-    if request.method == 'POST':
-        if (data_check == toy_validator and checkExistingValue(
-                data['category'], 'name', 'categories', mycursor)):
-            checkExistingValue(data['name'], 'name', table, mycursor, 422)
-            return postItem(data, table, mycursor, db, 'categories')
-        else:
-            abort(422)
-    else:
+    if request.method != 'POST':
         return jsonify(fetchOutput(mycursor, table, dm=True))
+    if (data_check == toy_validator and checkExistingValue(
+            data['category'], 'name', 'categories', mycursor)):
+        checkExistingValue(data['name'], 'name', table, mycursor, 422)
+        return postItem(data, table, mycursor, db, 'categories')
+    else:
+        abort(422)
 
 
 @app.route('/toys/<toy_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -100,15 +99,14 @@ def index_elves():
     data = {i: convert(j, i) for i, j in request.form.items()}
     data['illegal'] = 'true' if data.get('illegal') else 'false'
 
-    if request.method == 'POST':
-        if {i for i in data.keys()} == templates[table]:
-            checkExistingValue(data['login'], 'login', table, mycursor, 422)
-            postItem(data, table, mycursor, db)
-            return fetchOutput(mycursor, table, mycursor.lastrowid, dm=True)
-        else:
-            abort(422)
-    else:
+    if request.method != 'POST':
         return jsonify(fetchOutput(mycursor, table))
+    if set(data.keys()) == templates[table]:
+        checkExistingValue(data['login'], 'login', table, mycursor, 422)
+        postItem(data, table, mycursor, db)
+        return fetchOutput(mycursor, table, mycursor.lastrowid, dm=True)
+    else:
+        abort(422)
 
 
 @app.route('/elves/<elf_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -136,18 +134,17 @@ def show_elves(elf_id):
 def show_wishes():
     table, db, mycursor = get_db(request.path)
     data = request.form
-    data_check = sorted([i for i in data.keys()])
+    data_check = sorted(list(data.keys()))
 
-    if request.method == 'POST':
-        if (data_check == wishes_validator and checkExistingValue(
-                data['toy'], 'name', 'toys', mycursor)):
-            postItem(data, table, mycursor, db, 'toys')
-            scheduleMaster(mycursor, db, mycursor.lastrowid)
-            return jsonify(fetchOutput(mycursor, table, mycursor.lastrowid))
-        else:
-            abort(422)
-    else:
+    if request.method != 'POST':
         return jsonify(fetchOutput(mycursor, table))
+    if (data_check == wishes_validator and checkExistingValue(
+            data['toy'], 'name', 'toys', mycursor)):
+        postItem(data, table, mycursor, db, 'toys')
+        scheduleMaster(mycursor, db, mycursor.lastrowid)
+        return jsonify(fetchOutput(mycursor, table, mycursor.lastrowid))
+    else:
+        abort(422)
 
 # schedules ----------------------------------------------------------------- #
 

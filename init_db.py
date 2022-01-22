@@ -38,8 +38,12 @@ for data in [
         ("Chess", "Board game for smart children", 25, 2),
         ]:
     if data[-1] is None:
-        cursor.execute("""INSERT INTO toys (name, description, price)
-                         VALUES (?, ?, ?)""", data[0:3])
+        cursor.execute(
+            """INSERT INTO toys (name, description, price)
+                         VALUES (?, ?, ?)""",
+            data[:3],
+        )
+
     else:
         cursor.execute("""INSERT INTO toys
                         (name, description, price, category_id)
